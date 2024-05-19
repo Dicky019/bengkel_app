@@ -1,5 +1,13 @@
-import '/resources/pages/home_page.dart';
+import '../resources/pages/pangendara_riwayat_page.dart';
+import 'package:flutter_app/resources/pages/montir/montir_page.dart';
+import 'package:flutter_app/routes/guards/pengendara_route_guard.dart';
+
+import '../resources/pages/pengendara_page.dart';
+import '/resources/pages/login_page.dart';
+
 import 'package:nylo_framework/nylo_framework.dart';
+
+import 'guards/montir_route_guard.dart';
 
 /* App Router
 |--------------------------------------------------------------------------
@@ -10,17 +18,38 @@ import 'package:nylo_framework/nylo_framework.dart';
 |-------------------------------------------------------------------------- */
 
 appRouter() => nyRoutes((router) {
-  router.route(HomePage.path, (context) => HomePage(), initialRoute: true);
-  // Add your routes here
+      // Add your routes here
 
-  // router.route(NewPage.path, (context) => NewPage(), transition: PageTransitionType.fade);
+      // PengendaraPage using grouped routes
+      router.group(
+          () => {
+                "route_guards": [PengendaraRouteGuard()],
+                "prefix": "/pengendara"
+              }, (router) {
+        router.route(
+          PengendaraPage.path,
+          (_) => PengendaraPage(),
+        );
+      });
 
-  // Example using grouped routes
-  // router.group(() => {
-  //   "route_guards": [AuthRouteGuard()],
-  //   "prefix": "/dashboard"
-  // }, (router) {
-  //
-  //   router.route(AccountPage.path, (context) => AccountPage());
-  // });
-});
+      // MontirPage using grouped routes
+      router.group(
+          () => {
+                "route_guards": [MontirRouteGuard()],
+                "prefix": "/montir"
+              }, (router) {
+        router.route(
+          MontirPage.path,
+          (_) => MontirPage(),
+        );
+      });
+
+      router.route(
+        LoginPage.path,
+        (context) => LoginPage(),
+        authPage: true,
+        // initialRoute: true,
+      );
+      router.route(
+          PangendaraRiwayatPage.path, (context) => PangendaraRiwayatPage());
+    });

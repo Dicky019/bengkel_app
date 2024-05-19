@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '/resources/pages/home_page.dart';
+import 'package:flutter_app/app/models/user.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 /* Auth Route Guard
@@ -8,16 +8,19 @@ import 'package:nylo_framework/nylo_framework.dart';
 | Learn more https://nylo.dev/docs/5.20.0/router#route-guards
 |-------------------------------------------------------------------------- */
 
-class AuthRouteGuard extends NyRouteGuard {
-  AuthRouteGuard();
+class PengendaraRouteGuard extends NyRouteGuard {
+  PengendaraRouteGuard();
 
   @override
   Future<bool> canOpen(BuildContext? context, NyArgument? data) async {
-    return (await Auth.loggedIn());
+    final User? user = await Auth.user<User>();
+    dump("canOpen");
+    return user?.role == Role.pengendara;
   }
 
   @override
   redirectTo(BuildContext? context, NyArgument? data) async {
-    await routeTo(HomePage.path);
+    dump("redirectTo");
+    await routeToAuth();
   }
 }

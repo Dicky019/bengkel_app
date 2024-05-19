@@ -1,3 +1,11 @@
+import 'package:flutter_app/app/networking/bengkel_api_service.dart';
+
+import '/app/networking/pengendara_api_service.dart';
+import '/app/models/geo_location.dart';
+import '/app/models/bengkel.dart';
+import '../app/controllers/pengendara_controller.dart';
+import '/app/networking/auth_api_service.dart';
+import '/app/controllers/login_controller.dart';
 import '/app/controllers/home_controller.dart';
 import '/app/models/user.dart';
 import '/app/networking/api_service.dart';
@@ -11,11 +19,22 @@ import '/app/networking/api_service.dart';
 |-------------------------------------------------------------------------- */
 
 final Map<Type, dynamic> modelDecoders = {
-  List<User>: (data) => List.from(data).map((json) => User.fromJson(json)).toList(),
+  List<User>: (data) =>
+      List.from(data).map((json) => User.fromJson(json)).toList(),
   //
   User: (data) => User.fromJson(data),
 
   // User: (data) => User.fromJson(data),
+
+  List<Bengkel>: (data) =>
+      List.from(data).map((json) => Bengkel.fromJson(json)).toList(),
+
+  Bengkel: (data) => Bengkel.fromJson(data),
+
+  List<GeoLocation>: (data) =>
+      List.from(data).map((json) => GeoLocation.fromJson(json)).toList(),
+
+  GeoLocation: (data) => GeoLocation.fromJson(data),
 };
 
 /* API Decoders
@@ -30,8 +49,12 @@ final Map<Type, dynamic> apiDecoders = {
   ApiService: () => ApiService(),
 
   // ...
-};
 
+  AuthApiService: AuthApiService(),
+
+  PengendaraApiService: PengendaraApiService(),
+  BengkelApiService: BengkelApiService(),
+};
 
 /* Controller Decoders
 | -------------------------------------------------------------------------
@@ -44,5 +67,7 @@ final Map<Type, dynamic> controllers = {
 
   // ...
 
-};
+  LoginController: () => LoginController(),
 
+  PengendaraController: () => PengendaraController(),
+};
