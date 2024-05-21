@@ -20,14 +20,31 @@ class _PengendaraHomeState extends NyState<PengendaraHome> {
     stateName = PengendaraHome.state;
   }
 
-  @override
-  init() async {}
+  final keyLoadingPopular = 'listBengkelPopular';
+  final keyLoadingTerdekat = 'listBengkelTerdekat';
 
   @override
-  stateUpdated(dynamic data) async {
-    // e.g. to update this state from another class
-    // updateState(PengendaraHome.state, data: "example payload");
+  init() async {
+    setLoading(true, name: keyLoadingPopular);
+    setLoading(true, name: keyLoadingTerdekat);
+    if (!widget.controller.fetchListBengkelPopular) {
+      widget.controller.listBengkelPopular =
+          await widget.controller.getPopulerBengkels();
+    }
+    setLoading(false, name: keyLoadingPopular);
+
+    if (!widget.controller.fetchListBengkelTerdekat) {
+      widget.controller.listBengkelTerdekat =
+          await widget.controller.getTerdekatBengkels();
+    }
+
+    setLoading(false, name: keyLoadingTerdekat);
   }
+
+  // @override
+  // stateUpdated(data) {
+  //   return super.stateUpdated(data);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -43,33 +60,55 @@ class _PengendaraHomeState extends NyState<PengendaraHome> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Gap(20),
-                    Text('Selamat Datang, ${widget.controller.getUser.firstName}!')
-                        .headingSmall(context)
-                        .fontWeightBold(),
-                    Text('Layanan Apa yang anda butuhkan')
-                        .bodyLarge(context)
-                        .setColor(context, (color) => Colors.black54),
-                    Gap(24),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.search),
-                        border: OutlineInputBorder(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(16.0),
-                          ),
+                    const Gap(20),
+                    Row(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Selamat Datang, ${widget.controller.getUser.firstName}!')
+                                .headingSmall(context)
+                                .fontWeightBold(),
+                            const Text('Layanan Apa yang anda butuhkan')
+                                .bodyLarge(context)
+                                .setColor(context, (color) => Colors.black54),
+                          ],
                         ),
-                        hintText: 'Search Bengkel...',
-                      ),
+                        const Spacer(),
+                        IconButton.filledTonal(
+                          icon: const Icon(Icons.search),
+                          onPressed: () {},
+                        ),
+                      ],
                     ),
+                    const Gap(16),
+                    Row(
+                      children: [
+                        TextButton.icon(
+                          icon: const Icon(Icons.map),
+                          onPressed: widget.controller.goToMap,
+                          label: const Text("Lihat Map")
+                              .bodyLarge(context)
+                              .fontWeightBold(),
+                        ),
+                        const Spacer(),
+                        TextButton.icon(
+                          icon: const Icon(Icons.history),
+                          onPressed: widget.controller.goToRiwayat,
+                          label: const Text("Lihat Riwayat")
+                              .bodyLarge(context)
+                              .fontWeightBold(),
+                        ),
+                      ],
+                    ),
+                    const Gap(16),
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   children: [
-                    Gap(24),
                     RowContentTitleHomeWidget(
                       title: 'Populer',
                     ),
@@ -78,11 +117,12 @@ class _PengendaraHomeState extends NyState<PengendaraHome> {
                 ),
               ),
               RowContentBodyBengkelWidget(
-                futureList: widget.controller.getPopulerBengkels,
+                list: widget.controller.listBengkelPopular,
+                isLoading: isLoading(name: keyLoadingPopular),
                 widget: (bengkel) => CardBengkelWidget(bengkel: bengkel),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   children: [
                     Gap(24),
@@ -94,10 +134,11 @@ class _PengendaraHomeState extends NyState<PengendaraHome> {
                 ),
               ),
               RowContentBodyBengkelWidget(
-                futureList: widget.controller.getPopulerBengkels,
+                list: widget.controller.listBengkelTerdekat,
+                isLoading: isLoading(name: keyLoadingTerdekat),
                 widget: (bengkel) => CardBengkelWidget(bengkel: bengkel),
               ),
-              Gap(28),
+              const Gap(28),
             ],
           ),
         ),
@@ -119,7 +160,7 @@ class RowContentTitleHomeWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(title).titleLarge(context).fontWeightBold(),
-            Text('Lihat Semua')
+            const Text('Lihat Semua')
                 .bodyMedium(context)
                 .setColor(context, (color) => Colors.black54),
           ],
@@ -129,40 +170,32 @@ class RowContentTitleHomeWidget extends StatelessWidget {
   }
 }
 
-class RowContentBodyBengkelWidget<T> extends StatelessWidget {
-  final Future<List<Bengkel>> Function() futureList;
+class RowContentBodyBengkelWidget extends StatelessWidget {
+  final List<Bengkel> list;
+  final bool isLoading;
   final Widget Function(Bengkel value) widget;
+
   const RowContentBodyBengkelWidget({
     super.key,
-    required this.futureList,
+    required this.list,
     required this.widget,
+    required this.isLoading,
   });
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      child: FutureBuilder(
-        future: futureList(),
-        builder: (context, snapshot) {
-          return Skeletonizer(
-            containersColor: Colors.grey.shade50,
-            enabled: !snapshot.hasData,
-            child: Row(
-              children: [
-                Gap(16),
-                ...(snapshot.data ??
-                        List.filled(
-                          4,
-                          Bengkel.skeletonizer(),
-                        ))
-                    .map((value) => widget(value))
-                    .toList(),
-                Gap(16),
-              ],
-            ),
-          );
-        },
+      child: Skeletonizer(
+        containersColor: Colors.grey.shade50,
+        enabled: isLoading,
+        child: Row(
+          children: [
+            const Gap(16),
+            ...list.map((value) => widget(value)),
+            const Gap(16),
+          ],
+        ),
       ),
     );
   }
@@ -181,9 +214,9 @@ class CardBengkelWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            bengkel.image != null
+            bengkel.user?.imageUrl != null
                 ? Image.network(
-                    bengkel.image!,
+                    bengkel.user!.imageUrl,
                     height: 140,
                     width: 200,
                     fit: BoxFit.cover,

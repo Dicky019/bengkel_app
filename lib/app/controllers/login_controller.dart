@@ -1,4 +1,3 @@
-import 'package:flutter/widgets.dart';
 import 'package:flutter_app/app/events/login_event.dart';
 import 'package:flutter_app/app/models/user.dart';
 import 'package:flutter_app/app/networking/auth_api_service.dart';
@@ -14,10 +13,6 @@ class LoginController extends Controller {
   @override
   bool get singleton => true;
 
-  @override
-  construct(BuildContext context) {
-    super.construct(context);
-  }
 
   String loginName = "Pengendara";
 
@@ -29,17 +24,17 @@ class LoginController extends Controller {
     // state.dump();
 
     try {
-      GoogleSignIn _googleSignIn = GoogleSignIn(
+      GoogleSignIn googleSignIn = GoogleSignIn(
         // Optional clientId
         // clientId: 'your-client_id.apps.googleusercontent.com',
         clientId: _clientId,
       );
 
-      if (_googleSignIn.currentUser == null) {
-        await _googleSignIn.signIn();
+      if (googleSignIn.currentUser == null) {
+        await googleSignIn.signIn();
       }
 
-      final currentUser = _googleSignIn.currentUser;
+      final currentUser = googleSignIn.currentUser;
 
       if (currentUser == null) {
         "currentUser == null)".dump();

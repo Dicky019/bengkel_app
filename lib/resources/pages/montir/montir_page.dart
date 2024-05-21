@@ -1,10 +1,6 @@
 import 'package:nylo_framework/nylo_framework.dart';
-import 'package:nylo_framework/theme/helper/ny_theme.dart';
 import 'package:flutter/material.dart';
-import '/bootstrap/extensions.dart';
-import '/resources/widgets/logo_widget.dart';
 import '/resources/widgets/safearea_widget.dart';
-import '/bootstrap/helpers.dart';
 import '/app/controllers/home_controller.dart';
 
 class MontirPage extends NyStatefulWidget<HomeController> {
@@ -16,7 +12,7 @@ class MontirPage extends NyStatefulWidget<HomeController> {
 class MontirPageState extends NyState<MontirPage> {
   @override
   boot() async {
-    final user = await widget.controller.getUser;
+    final user = widget.controller.getUser;
     (user?.toJson().toString() ?? "kosong").dump();
   }
 
@@ -24,7 +20,7 @@ class MontirPageState extends NyState<MontirPage> {
   Widget view(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Montir"),
+        title: const Text("Montir"),
         centerTitle: true,
         actions: [
           IconButton(
@@ -56,7 +52,7 @@ class MontirPageState extends NyState<MontirPage> {
               ),
             );
           },
-          separatorBuilder: (context, index) => Divider(),
+          separatorBuilder: (context, index) => const Divider(),
           itemCount: 12,
         ),
       ),

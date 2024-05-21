@@ -32,7 +32,7 @@ class PengendaraApiService extends NyApiService {
     userToken.toString().dump();
     return await network<Pengendara>(
       request: (request) => request.post(
-        "",
+        "/",
         data: {
           "id": id,
           "noTelephone": noTelephone,

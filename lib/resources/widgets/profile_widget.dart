@@ -2,8 +2,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 
 class Profile extends StatelessWidget {
-  const Profile({Key? key, this.height, this.width, this.image})
-      : super(key: key);
+  const Profile({super.key, this.height, this.width, this.image});
   final double? height;
   final double? width;
   final String? image;
@@ -15,7 +14,7 @@ class Profile extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(50.0),
       ),
-      child: Container(
+      child: const SizedBox(
         height: 100,
         width: 100,
         child: Icon(

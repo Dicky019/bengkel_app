@@ -14,6 +14,7 @@ class PengendaraPage extends NyStatefulWidget<PengendaraController> {
 class PengendaraPageState extends NyState<PengendaraPage> {
   final noTel = TextEditingController(
       text: getEnv('APP_DEBUG') ? "+62 813-558-347-69" : null);
+
   @override
   boot() async {
     await widget.controller.init();
@@ -48,14 +49,14 @@ class PengendaraPageState extends NyState<PengendaraPage> {
         backgroundColor: Colors.blue,
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.white54,
-        unselectedIconTheme: IconThemeData(color: Colors.white54),
-        selectedIconTheme: IconThemeData(color: Colors.white),
+        unselectedIconTheme: const IconThemeData(color: Colors.white54),
+        selectedIconTheme: const IconThemeData(color: Colors.white),
         onTap: (index) {
           setState(() => widget.controller.bottomNavIndex = index);
           widget.controller.onChangeNav(index);
         },
         currentIndex: bottomNavIndex,
-        items: [
+        items: const [
           BottomNavigationBarItem(
             label: 'Home',
             icon: Icon(EvaIcons.home),

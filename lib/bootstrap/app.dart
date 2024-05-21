@@ -101,7 +101,7 @@ class AppBuild extends StatelessWidget {
               locale: locale,
               supportedLocales:
                   supportedLocales ?? [
-                    Locale('en', 'US')
+                    const Locale('en', 'US')
                   ],
             ),
           ),

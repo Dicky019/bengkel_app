@@ -40,7 +40,7 @@ class _LoginPageState extends NyState<LoginPage> {
           setState(() {});
         },
         currentIndex: widget.controller.loginName == "Pengendara" ? 0 : 1,
-        items: [
+        items: const [
           BottomNavigationBarItem(
             label: 'Pengendara',
             icon: Icon(Icons.person_pin),
@@ -66,18 +66,19 @@ class _LoginPageState extends NyState<LoginPage> {
               Text("Login ${widget.controller.loginName}")
                   .headingLarge(context)
                   .fontWeightBold(),
-              Gap(8),
-              Text("Enter your gmail below to login your account").setColor(
+              const Gap(8),
+              const Text("Enter your gmail below to login your account")
+                  .setColor(
                 context,
                 (color) => color.primaryContent.withOpacity(0.6),
               ),
-              Gap(64),
+              const Gap(64),
               OutlinedButton.icon(
                 style: OutlinedButton.styleFrom(
                   minimumSize: Size(size.width, 48),
                 ),
                 onPressed: widget.controller.loginGoogle,
-                label: Text("Google").bodyLarge(context).fontWeightBold(),
+                label: const Text("Google").bodyLarge(context).fontWeightBold(),
                 icon: Icon(
                   EvaIcons.google,
                   color: context.color.buttonBackground,

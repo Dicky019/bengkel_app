@@ -37,9 +37,9 @@ class _PengendaraProfileState extends NyState<PengendaraProfile> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Gap(20),
+              const Gap(20),
               Avatar(imageUrl: widget.controller.getUser.imageUrl),
-              Gap(36),
+              const Gap(36),
               CardWidget(
                 child: Column(
                   children: [
@@ -48,17 +48,17 @@ class _PengendaraProfileState extends NyState<PengendaraProfile> {
                         widget.controller.name,
                       ),
                     ),
-                    Divider(),
+                    const Divider(),
                     ListTile(
                       title: Text(widget.controller.getUser.email),
                     ),
-                    Divider(),
+                    const Divider(),
                     ListTile(
                       title: Text(
                         widget.controller.getUser.role.name.capitalize(),
                       ),
                     ),
-                    Divider(),
+                    const Divider(),
                     ListTile(
                       title: Text(
                         widget.controller.getUser.pengendara?.noTelephone ??
@@ -68,33 +68,33 @@ class _PengendaraProfileState extends NyState<PengendaraProfile> {
                   ],
                 ),
               ),
-              Gap(16),
+              const Gap(16),
               CardWidget(
                 child: Column(
                   children: [
                     ListTile(
                       onTap: widget.controller.goToRiwayat,
-                      title: Text(
+                      title: const Text(
                         "Riwayat",
                       ).fontWeightBold(),
-                      trailing: Icon(
+                      trailing: const Icon(
                         Icons.keyboard_arrow_right,
                       ),
                     ),
-                    Divider(),
+                    const Divider(),
                     ListTile(
                       onTap: widget.controller.logout,
-                      title: Text(
+                      title: const Text(
                         "Logout",
                       ).fontWeightBold(),
-                      trailing: Icon(
+                      trailing: const Icon(
                         Icons.logout,
                       ),
                     ),
                   ],
                 ),
               ),
-              Gap(16),
+              const Gap(16),
             ],
           ),
         ),

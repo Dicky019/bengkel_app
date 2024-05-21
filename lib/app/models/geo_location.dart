@@ -22,11 +22,23 @@ class GeoLocation extends Model {
     };
   }
 
-  factory GeoLocation.fromJson(Map<String, dynamic> map) {
+  factory GeoLocation.fromJson(Map<String, dynamic>? map) {
     return GeoLocation(
-      id: map['id'] as String,
-      lat: double.tryParse(map['lat'] as String) ?? 0.0,
-      long: double.tryParse(map['long'] as String) ?? 0.0,
+      id: map?['id'] ?? "id",
+      lat: double.tryParse(map?['lat']) ?? 0.0,
+      long: double.tryParse(map?['long']) ?? 0.0,
+    );
+  }
+
+  factory GeoLocation.empty() {
+    return GeoLocation.fromJson(null);
+  }
+
+  factory GeoLocation.skeletonizer() {
+    return GeoLocation(
+      id: 'id',
+      lat: 31312312.31221,
+      long: 31312312.31221,
     );
   }
 }

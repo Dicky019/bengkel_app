@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
-final maskFormatter = new MaskTextInputFormatter(
+final maskFormatter = MaskTextInputFormatter(
   mask: '+62 ###-###-###-###',
   filter: {"#": RegExp(r'[0-9]')},
   type: MaskAutoCompletionType.lazy,
@@ -20,7 +20,7 @@ class PengendaraDetailForm extends StatelessWidget {
       content: TextField(
         controller: controller,
         inputFormatters: [maskFormatter],
-        decoration: InputDecoration(hintText: "+62 ###-###-###-###"),
+        decoration: const InputDecoration(hintText: "+62 ###-###-###-###"),
       ),
       actions: [
         Theme(

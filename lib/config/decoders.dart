@@ -1,14 +1,16 @@
-import 'package:flutter_app/app/networking/bengkel_api_service.dart';
+import 'package:flutter_app/app/networking/pemesanan_api_service.dart';
 
-import '/app/networking/pengendara_api_service.dart';
-import '/app/models/geo_location.dart';
-import '/app/models/bengkel.dart';
-import '../app/controllers/pengendara_controller.dart';
-import '/app/networking/auth_api_service.dart';
-import '/app/controllers/login_controller.dart';
+import '/app/models/pemesanan.dart';
+import '/app/networking/bengkel_api_service.dart';
+import '/app/controllers/pengendara_controller.dart';
 import '/app/controllers/home_controller.dart';
+import '/app/controllers/login_controller.dart';
+import '/app/models/bengkel.dart';
+import '/app/models/geo_location.dart';
 import '/app/models/user.dart';
 import '/app/networking/api_service.dart';
+import '/app/networking/auth_api_service.dart';
+import '/app/networking/pengendara_api_service.dart';
 
 /* Model Decoders
 |--------------------------------------------------------------------------
@@ -30,6 +32,11 @@ final Map<Type, dynamic> modelDecoders = {
       List.from(data).map((json) => Bengkel.fromJson(json)).toList(),
 
   Bengkel: (data) => Bengkel.fromJson(data),
+
+  List<Pemesanan>: (data) =>
+      List.from(data).map((json) => Pemesanan.fromJson(json)).toList(),
+
+  Pemesanan: (data) => Pemesanan.fromJson(data),
 
   List<GeoLocation>: (data) =>
       List.from(data).map((json) => GeoLocation.fromJson(json)).toList(),
@@ -54,6 +61,7 @@ final Map<Type, dynamic> apiDecoders = {
 
   PengendaraApiService: PengendaraApiService(),
   BengkelApiService: BengkelApiService(),
+  PemesananApiService: PemesananApiService(),
 };
 
 /* Controller Decoders

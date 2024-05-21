@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
-class PangendaraRiwayatPage extends NyStatefulWidget {
-  static const path = '/pangendara-riwayat';
+class PangendaraMapPage extends NyStatefulWidget {
+  static const path = '/pangendara-map';
 
-  PangendaraRiwayatPage({super.key})
-      : super(path, child: _PangendaraRiwayatPageState());
+  PangendaraMapPage({super.key})
+      : super(path, child: _PangendaraMapPageState());
 }
 
-class _PangendaraRiwayatPageState extends NyState<PangendaraRiwayatPage> {
+class _PangendaraMapPageState extends NyState<PangendaraMapPage> {
   @override
   init() async {}
 
@@ -21,7 +21,7 @@ class _PangendaraRiwayatPageState extends NyState<PangendaraRiwayatPage> {
   @override
   Widget view(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Pangendara Riwayat")),
+      appBar: AppBar(title: const Text("Pangendara Map")),
       body: SafeArea(
         child: Container(),
       ),

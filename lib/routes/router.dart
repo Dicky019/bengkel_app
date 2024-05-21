@@ -1,11 +1,11 @@
-import '../resources/pages/pangendara_riwayat_page.dart';
-import 'package:flutter_app/resources/pages/montir/montir_page.dart';
-import 'package:flutter_app/routes/guards/pengendara_route_guard.dart';
-
-import '../resources/pages/pengendara_page.dart';
-import '/resources/pages/login_page.dart';
-
 import 'package:nylo_framework/nylo_framework.dart';
+
+import '/resources/pages/pengendara_map.dart';
+import '/resources/pages/pangendara_riwayat_page.dart';
+import '/resources/pages/montir/montir_page.dart';
+import '/routes/guards/pengendara_route_guard.dart';
+import '/resources/pages/pengendara_page.dart';
+import '/resources/pages/login_page.dart';
 
 import 'guards/montir_route_guard.dart';
 
@@ -30,6 +30,14 @@ appRouter() => nyRoutes((router) {
           PengendaraPage.path,
           (_) => PengendaraPage(),
         );
+        router.route(
+          PangendaraRiwayatPage.path,
+          (context) => PangendaraRiwayatPage(),
+        );
+        router.route(
+          PangendaraMapPage.path,
+          (context) => PangendaraMapPage(),
+        );
       });
 
       // MontirPage using grouped routes
@@ -50,6 +58,4 @@ appRouter() => nyRoutes((router) {
         authPage: true,
         // initialRoute: true,
       );
-      router.route(
-          PangendaraRiwayatPage.path, (context) => PangendaraRiwayatPage());
     });

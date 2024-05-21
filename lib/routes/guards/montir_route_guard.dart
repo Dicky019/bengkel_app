@@ -13,7 +13,7 @@ class MontirRouteGuard extends NyRouteGuard {
 
   @override
   Future<bool> canOpen(BuildContext? context, NyArgument? data) async {
-    final User? user = await Auth.user<User>();
+    final User? user = Auth.user<User>();
     dump("canOpen");
     return user?.role == Role.motir;
   }

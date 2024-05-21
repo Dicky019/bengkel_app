@@ -7,10 +7,10 @@ class CardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         vertical: 8,
       ),
-      margin: EdgeInsets.symmetric(
+      margin: const EdgeInsets.symmetric(
         horizontal: 16,
       ),
       decoration: BoxDecoration(
@@ -22,7 +22,7 @@ class CardWidget extends StatelessWidget {
           BoxShadow(
             color: Colors.black.withOpacity(0.08),
             blurRadius: 24,
-            offset: Offset(0, 8),
+            offset: const Offset(0, 8),
             spreadRadius: 8,
           )
         ],

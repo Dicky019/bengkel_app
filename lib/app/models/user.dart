@@ -24,13 +24,6 @@ class User extends Model {
     required this.pengendara,
   });
 
-  // User.fromJson(dynamic data) {
-  //   id = data['id'];
-  //   firstName = data['firstName'];
-  //   email = data['email'];
-  //   role = data['role'] == "pengendara" ? Role.pengendara : Role.motir;
-  // }
-
   @override
   toJson() => <String, dynamic>{
         'id': id,
@@ -40,6 +33,22 @@ class User extends Model {
         'imageUrl': imageUrl,
         'role': role.name,
       };
+
+  factory User.empty() {
+    return User.fromJson(null);
+  }
+
+  factory User.skeletonizer() {
+    return User(
+      id: 'id',
+      firstName: 'firstName',
+      lastName: 'lastName',
+      email: 'dicky93darmawan@gmail.com',
+      imageUrl: 'imageUrl',
+      role: Role.pengendara,
+      pengendara: null,
+    );
+  }
 
   factory User.fromJson(Map<String, dynamic>? map) {
     return User(
@@ -61,7 +70,7 @@ class User extends Model {
       lastName: user?['lastName'] ?? '-',
       email: user?['email'] ?? '-',
       imageUrl: user?['imageUrl'] ?? '-',
-      role: user?['role'] == "pengendara" ? Role.pengendara : Role.motir,
+      role: Role.pengendara,
       pengendara: pengendara == null ? null : Pengendara.fromJson(pengendara),
     );
   }
