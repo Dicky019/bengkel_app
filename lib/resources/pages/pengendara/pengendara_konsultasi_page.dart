@@ -1,9 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/app/controllers/pengendara_controller.dart';
+import 'package:flutter_app/app/models/chat_status.dart';
+import 'package:flutter_app/app/networking/message_service.dart';
 import 'package:gap/gap.dart';
-
 import 'package:intl/intl.dart';
 import 'package:nylo_framework/nylo_framework.dart';
+
+import 'package:flutter_app/app/controllers/pengendara_controller.dart';
 
 class PengendaraKonsultasi extends StatefulWidget {
   final PengendaraController controller;
@@ -20,9 +23,6 @@ class _PengendaraKonsultasiState extends NyState<PengendaraKonsultasi> {
     stateName = PengendaraKonsultasi.state;
   }
 
-  final keyLoadingPemesanan = 'keyLoadingPemesanan';
-  // final keyLoadingTerdekat = 'listBengkelTerdekat';
-
   @override
   init() async {
     DateTime.now().toString().dump(tag: "DateTime");
@@ -31,20 +31,11 @@ class _PengendaraKonsultasiState extends NyState<PengendaraKonsultasi> {
       return;
     }
 
-    setLoading(true, name: keyLoadingPemesanan);
-
     final data = await Future.wait([
-      widget.controller.getPemesanans(),
-    ]).then((v) {
-      widget.controller.fetchListPemesanan = true;
-      return v;
-    });
+      widget.controller.getPemesanans(widget.controller.getUser.pengendara!.id),
+    ]);
 
     widget.controller.listPemesanan = data[0];
-
-    // widget.controller.listBengkelTerdekat = data[1];
-
-    setLoading(false, name: keyLoadingPemesanan);
   }
 
   @override
@@ -52,6 +43,8 @@ class _PengendaraKonsultasiState extends NyState<PengendaraKonsultasi> {
     // e.g. to update this state from another class
     // updateState(PengendaraKonsultasi.state, data: "example payload");
   }
+
+  final messageService = MessageService();
 
   @override
   Widget build(BuildContext context) {
@@ -65,26 +58,29 @@ class _PengendaraKonsultasiState extends NyState<PengendaraKonsultasi> {
           ),
         ),
         backgroundColor: Colors.blue,
+        centerTitle: true,
       ),
       body: Skeletonizer(
-        enabled: isLoading(name: keyLoadingPemesanan),
+        enabled: !widget.controller.fetchListPemesanan,
         containersColor: Colors.grey.shade50,
         child: ListView.separated(
           itemBuilder: (context, index) {
             final pemesanan = widget.controller.listPemesanan[index];
-            return Column(
-              children: [
-                if (index == 0) const Gap(8),
-                ListTileChat(
-                  imageUrl: pemesanan.bengkel.user?.imageUrl,
-                  name: pemesanan.bengkel.name,
-                  chatDate: DateTime.now(),
-                  chatKontent: "dasdsadadasdads",
-                  onTap: () {},
-                  lastReadCount: '2',
-                ),
-              ],
+            final mainChild = ListTileChat(
+              onTap: () => widget.controller.goToChat(pemesanan),
+              id: pemesanan.bengkel.id,
+              name: pemesanan.bengkel.name,
+              imageUrl: pemesanan.bengkel.user?.imageUrl,
+              messageService: messageService,
             );
+
+            if (index == 0) {
+              return Column(
+                children: [if (index == 0) const Gap(8), mainChild],
+              );
+            }
+
+            return mainChild;
           },
           separatorBuilder: (BuildContext context, int index) {
             return const Gap(8);
@@ -97,53 +93,77 @@ class _PengendaraKonsultasiState extends NyState<PengendaraKonsultasi> {
 }
 
 class ListTileChat extends StatelessWidget {
-  final String? imageUrl;
-  final String name;
-  final String chatKontent;
-  final String lastReadCount;
-  final DateTime chatDate;
   final void Function()? onTap;
+  final String id;
+  final String name;
+  final String? imageUrl;
+  final MessageService messageService;
 
   const ListTileChat({
     super.key,
-    this.imageUrl,
-    required this.name,
-    required this.chatKontent,
-    required this.chatDate,
     this.onTap,
-    required this.lastReadCount,
+    required this.id,
+    required this.name,
+    this.imageUrl,
+    required this.messageService,
   });
 
   @override
   Widget build(BuildContext context) {
+    dump(id);
     final avatar = imageUrl != null
         ? Image.network(imageUrl!)
         : Image.asset("noimage.png").localAsset();
+
+    return StreamBuilder(
+      stream: messageService.messageInfo(id),
+      builder: (context, snapshot) {
+        if (snapshot.hasData && snapshot.data?.data() != null) {
+          return main(avatar, snapshot.data?.data());
+        }
+        return main(
+          avatar,
+          ChatStatus.fromMap(null),
+        );
+      },
+    );
+  }
+
+  ListTile main(Image avatar, ChatStatus? listTileChatModel) {
     return ListTile(
       onTap: onTap,
       leading: avatar.circleAvatar(),
       title: Text(name),
-      subtitle: Text(chatKontent),
-      trailing: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(DateFormat.Hm().format(DateTime.now())),
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Colors.blue.shade600,
-              shape: BoxShape.circle,
+      subtitle: listTileChatModel?.chatKontent != null
+          ? Text(listTileChatModel!.chatKontent)
+          : null,
+      trailing: listTileChatModel?.lastReadCount == null &&
+              listTileChatModel?.chatDate == null
+          ? null
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  DateFormat.Hm().format(
+                    listTileChatModel!.chatDate.toDate(),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.shade600,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Text(
+                    listTileChatModel.lastReadCount.toString(),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
             ),
-            child: Text(
-              lastReadCount,
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

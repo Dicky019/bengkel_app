@@ -20,25 +20,17 @@ class _PengendaraHomeState extends NyState<PengendaraHome> {
     stateName = PengendaraHome.state;
   }
 
-  final keyLoadingPopular = 'listBengkelPopular';
-  final keyLoadingTerdekat = 'listBengkelTerdekat';
-
   @override
   init() async {
-    setLoading(true, name: keyLoadingPopular);
-    setLoading(true, name: keyLoadingTerdekat);
     if (!widget.controller.fetchListBengkelPopular) {
       widget.controller.listBengkelPopular =
           await widget.controller.getPopulerBengkels();
     }
-    setLoading(false, name: keyLoadingPopular);
 
     if (!widget.controller.fetchListBengkelTerdekat) {
       widget.controller.listBengkelTerdekat =
           await widget.controller.getTerdekatBengkels();
     }
-
-    setLoading(false, name: keyLoadingTerdekat);
   }
 
   // @override
@@ -118,7 +110,7 @@ class _PengendaraHomeState extends NyState<PengendaraHome> {
               ),
               RowContentBodyBengkelWidget(
                 list: widget.controller.listBengkelPopular,
-                isLoading: isLoading(name: keyLoadingPopular),
+                isLoading: !widget.controller.fetchListBengkelPopular,
                 widget: (bengkel) => CardBengkelWidget(bengkel: bengkel),
               ),
               const Padding(
@@ -135,7 +127,7 @@ class _PengendaraHomeState extends NyState<PengendaraHome> {
               ),
               RowContentBodyBengkelWidget(
                 list: widget.controller.listBengkelTerdekat,
-                isLoading: isLoading(name: keyLoadingTerdekat),
+                isLoading: !widget.controller.fetchListBengkelTerdekat,
                 widget: (bengkel) => CardBengkelWidget(bengkel: bengkel),
               ),
               const Gap(28),

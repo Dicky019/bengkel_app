@@ -1,5 +1,6 @@
 import 'package:flutter_app/app/models/pemesanan.dart';
 import 'package:flutter_app/app/networking/pemesanan_api_service.dart';
+import 'package:flutter_app/resources/pages/chat_page.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
@@ -80,9 +81,9 @@ class PengendaraController extends Controller {
     return bengkels ?? [];
   }
 
-  Future<List<Pemesanan>> getPemesanans() async {
+  Future<List<Pemesanan>> getPemesanans(String id) async {
     final List<Pemesanan>? pemesanans =
-        await api<PemesananApiService>((request) => request.getPemesanans());
+        await api<PemesananApiService>((request) => request.getPemesanans(id));
     fetchListPemesanan = true;
     return pemesanans ?? [];
   }
@@ -112,6 +113,12 @@ class PengendaraController extends Controller {
     routeTo(
       PangendaraMapPage.path,
     );
+  }
+
+  goToChat(Pemesanan pemesanan) {
+    routeTo(ChatPage.path, queryParameters: {
+      "id": pemesanan.id,
+    });
   }
 
   Future onChangeNav(int index) async {

@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "446706638139",
+    "project_id": "bengkel-412815",
+    "storage_bucket": "bengkel-412815.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:446706638139:android:68d7164b42e019ce80ab1e",
+        "android_client_info": {
+          "package_name": "com.nylo.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "446706638139-tj0kp5nht0nh75a0p7aj077edmeh5paf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuxVRdZX1jqFqMCJRHmCv_iNvCMD-16LA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "446706638139-tj0kp5nht0nh75a0p7aj077edmeh5paf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "446706638139-ig39aaai6k8pv4sgb0hldkdi2qtet6cb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.nylo.ios"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

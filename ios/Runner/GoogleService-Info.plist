@@ -6,9 +6,31 @@
 	<string>446706638139-ig39aaai6k8pv4sgb0hldkdi2qtet6cb.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
 	<string>com.googleusercontent.apps.446706638139-ig39aaai6k8pv4sgb0hldkdi2qtet6cb</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>446706638139-epjtgjbfnm4tggnts5gk45qd9hfetb2g.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDXers69GlsE0DGLOeITHVdGHa9raoS3UY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>446706638139</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.nylo.ios</string>
+	<key>PROJECT_ID</key>
+	<string>bengkel-412815</string>
+	<key>STORAGE_BUCKET</key>
+	<string>bengkel-412815.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:446706638139:ios:8df8b46dab9d944d80ab1e</string>
 </dict>
 </plist>

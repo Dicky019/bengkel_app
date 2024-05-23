@@ -21,11 +21,12 @@ class PemesananApiService extends NyApiService {
   String get baseUrl => getEnv('API_BASE_URL') + '/pemesanan';
 
   /// Example API Request
-  Future<List<Pemesanan>?> getPemesanans() async {
+  Future<List<Pemesanan>?> getPemesanans(
+    String id,
+  ) async {
     return await network<List<Pemesanan>>(
-      request: (request) => request.get(
-        "/",
-      ),
+      request: (request) =>
+          request.get("/", queryParameters: {'id': id, 'role': 'pengendara'}),
       bearerToken: await StorageKey.userToken.read(),
       handleSuccess: (response) {
         dump(response.data['data']);
@@ -33,6 +34,22 @@ class PemesananApiService extends NyApiService {
             .map((json) => Pemesanan.fromJson(json))
             .toList();
         // return [];
+      },
+      handleFailure: (error) {
+        dump(error);
+      },
+    );
+  }
+
+  Future<Pemesanan?> getPemesanan(
+    String id,
+  ) async {
+    return await network<Pemesanan>(
+      request: (request) => request.get("/$id"),
+      bearerToken: await StorageKey.userToken.read(),
+      handleSuccess: (response) {
+        dump(response.data['data']);
+        return Pemesanan.fromJson(response.data['data']);
       },
       handleFailure: (error) {
         dump(error);

@@ -5,6 +5,7 @@ import 'package:nylo_framework/nylo_framework.dart';
 /// Bengkel Model.
 
 class Bengkel extends Model {
+  final String id;
   final String name;
   final String noTelephone;
   final String alamat;
@@ -13,6 +14,7 @@ class Bengkel extends Model {
   final User? user;
 
   Bengkel({
+    required this.id,
     required this.name,
     required this.noTelephone,
     required this.alamat,
@@ -23,6 +25,7 @@ class Bengkel extends Model {
 
   factory Bengkel.fromJson(data) {
     return Bengkel(
+      id: data['id'] ?? "-",
       name: data['name'] ?? "-",
       noTelephone: data['no_telephone'] ?? "-",
       alamat: data['alamat'] ?? "-",
@@ -37,6 +40,7 @@ class Bengkel extends Model {
 
   factory Bengkel.skeletonizer() {
     return Bengkel(
+      id: "id",
       name: "Dicky Darmawan",
       noTelephone: "0813-5583-4769",
       alamat:
@@ -47,19 +51,13 @@ class Bengkel extends Model {
   }
 
   factory Bengkel.empty() {
-    return Bengkel(
-      name: "Dicky",
-      noTelephone: "-",
-      alamat: "-",
-      // image: null,
-      geo: null,
-      user: null,
-    );
+    return Bengkel.fromJson(null);
   }
 
   @override
   toJson() {
     return {
+      'id': id,
       'name': name,
       'no_telephone': noTelephone,
       'alamat': alamat,

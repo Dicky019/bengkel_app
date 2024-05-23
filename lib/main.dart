@@ -1,5 +1,7 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/app/models/user.dart';
+import 'package:flutter_app/firebase_options.dart';
 import 'package:flutter_app/resources/pages/login_page.dart';
 import 'package:flutter_app/resources/pages/montir/montir_page.dart';
 import 'package:flutter_app/resources/pages/pengendara_page.dart';
@@ -11,6 +13,9 @@ import 'bootstrap/boot.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   configLoading();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   Nylo nylo = await Nylo.init(setup: Boot.nylo, setupFinished: Boot.finished);
 
   final User? user = Backpack.instance.auth();
@@ -30,7 +35,21 @@ void main() async {
       debugShowCheckedModeBanner: false,
       initialRoute: nylo.getInitialRoute(),
       navigatorObservers: nylo.getNavigatorObservers(),
-      themeData: ThemeData(useMaterial3: true, colorSchemeSeed: Colors.blue),
+      themeData: ThemeData(
+        useMaterial3: true,
+        colorSchemeSeed: Colors.blue,
+        appBarTheme: const AppBarTheme(
+          titleTextStyle: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w500,
+            fontSize: 20,
+          ),
+          centerTitle: true,
+          iconTheme: IconThemeData(
+            color: Colors.white,
+          ),
+        ),
+      ),
       builder: EasyLoading.init(),
     ),
   );

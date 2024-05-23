@@ -1,3 +1,5 @@
+import 'package:flutter_app/resources/pages/chat_page.dart';
+import 'package:flutter_app/routes/guards/auth_route_guard.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 import '/resources/pages/pengendara_map.dart';
@@ -50,7 +52,17 @@ appRouter() => nyRoutes((router) {
           MontirPage.path,
           (_) => MontirPage(),
         );
+        // router.route(
+        //   ChatPage.path,
+        //   (context) => ChatPage(),
+        // );
       });
+
+      router.route(
+        routeGuards: [AuthRouteGuard()],
+        ChatPage.path,
+        (context) => ChatPage(),
+      );
 
       router.route(
         LoginPage.path,
