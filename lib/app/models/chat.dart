@@ -1,25 +1,33 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // ignore_for_file: overridden_fields
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
+import 'package:flutter/foundation.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 import 'user.dart';
 
 class Chat extends ChatMessage {
+  final String id;
   Chat({
+    required this.id,
     required this.user,
     required this.createdAtTimestamp,
     this.isMarkdown = false,
     this.text = '',
     this.medias,
     this.status = MessageStatus.none,
-  }) : super(user: user, createdAt: createdAtTimestamp.toDate().toLocal());
+  }) : super(
+          user: user,
+          createdAt: createdAtTimestamp.toDate().toLocal(),
+        );
 
   /// Create a Chat instance from json data
-  factory Chat.fromJson(Map<String, dynamic>? jsonData) {
+  factory Chat.firebase(DocumentSnapshot<Map<String, dynamic>> firebaseData) {
     final User user = Auth.user<User>()!;
     return Chat(
+      id: firebaseData.id,
       user: ChatUser(
         id: user.id,
         firstName: user.firstName,
@@ -27,18 +35,20 @@ class Chat extends ChatMessage {
         profileImage: user.imageUrl,
       ),
       createdAtTimestamp: Timestamp.fromDate(
-        DateTime.tryParse((jsonData?['createdAt'] ?? "").toString()) ??
+        DateTime.tryParse(
+                (firebaseData.data()?['createdAt'] ?? "").toString()) ??
             Timestamp.now().toDate(),
       ),
-      text: jsonData?['text']?.toString() ?? '',
-      isMarkdown: jsonData?['isMarkdown']?.toString() == 'true',
-      medias: jsonData?['medias'] != null
-          ? (jsonData?['medias'] as List<dynamic>)
+      text: firebaseData.data()?['text']?.toString() ?? '',
+      isMarkdown: firebaseData.data()?['isMarkdown']?.toString() == 'true',
+      medias: firebaseData.data()?['medias'] != null
+          ? (firebaseData.data()?['medias'] as List<dynamic>)
               .map((dynamic media) =>
                   ChatMedia.fromJson(media as Map<String, dynamic>))
               .toList()
           : <ChatMedia>[],
-      status: MessageStatus.parse(jsonData?['status'].toString() ?? 'failed'),
+      status: MessageStatus.parse(
+          firebaseData.data()?['status'].toString() ?? 'failed'),
     );
   }
 
@@ -53,13 +63,14 @@ class Chat extends ChatMessage {
       ),
       createdAtTimestamp: Timestamp.now(),
       medias: medias,
-      status: MessageStatus.parse('send'),
+      id: '',
     );
   }
 
   factory Chat.text(String text) {
     final User user = Auth.user<User>()!;
     return Chat(
+      id: '',
       user: ChatUser(
         id: user.id,
         firstName: user.firstName,
@@ -68,13 +79,13 @@ class Chat extends ChatMessage {
       ),
       text: text,
       createdAtTimestamp: Timestamp.now(),
-      status: MessageStatus.parse('send'),
     );
   }
 
   factory Chat.user() {
     final User user = Auth.user<User>()!;
     return Chat(
+      id: '',
       user: ChatUser(
         id: user.id,
         firstName: user.firstName,
@@ -119,5 +130,27 @@ class Chat extends ChatMessage {
       'status': status.toString(),
       'isMarkdown': isMarkdown,
     };
+  }
+
+  @override
+  bool operator ==(covariant Chat other) {
+    if (identical(this, other)) return true;
+
+    return other.isMarkdown == isMarkdown &&
+        other.text == text &&
+        other.user == user &&
+        listEquals(other.medias, medias) &&
+        other.createdAt == createdAt &&
+        other.status == status;
+  }
+
+  @override
+  int get hashCode {
+    return isMarkdown.hashCode ^
+        text.hashCode ^
+        user.hashCode ^
+        medias.hashCode ^
+        createdAt.hashCode ^
+        status.hashCode;
   }
 }

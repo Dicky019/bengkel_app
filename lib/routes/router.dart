@@ -1,14 +1,15 @@
-import 'package:flutter_app/resources/pages/chat_page.dart';
-import 'package:flutter_app/routes/guards/auth_route_guard.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
+import '/resources/pages/chat_page.dart';
+import '/resources/pages/image_view_page.dart';
 import '/resources/pages/pengendara_map.dart';
 import '/resources/pages/pangendara_riwayat_page.dart';
 import '/resources/pages/montir/montir_page.dart';
-import '/routes/guards/pengendara_route_guard.dart';
 import '/resources/pages/pengendara_page.dart';
 import '/resources/pages/login_page.dart';
 
+import 'guards/pengendara_route_guard.dart';
+import 'guards/auth_route_guard.dart';
 import 'guards/montir_route_guard.dart';
 
 /* App Router
@@ -62,6 +63,12 @@ appRouter() => nyRoutes((router) {
         routeGuards: [AuthRouteGuard()],
         ChatPage.path,
         (context) => ChatPage(),
+      );
+
+      router.route(
+        routeGuards: [AuthRouteGuard()],
+        ImageViewPage.path,
+        (context) => ImageViewPage(),
       );
 
       router.route(

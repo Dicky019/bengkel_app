@@ -16,8 +16,7 @@ class MessageService {
           .doc(messagesId)
           .collection("messages")
           .withConverter<Chat>(
-            fromFirestore: (snapshot, options) =>
-                Chat.fromJson(snapshot.data()),
+            fromFirestore: (snapshot, options) => Chat.firebase(snapshot),
             toFirestore: (value, options) => value.toJson(),
           );
 
@@ -45,7 +44,7 @@ class MessageService {
     ImageServiceModel image,
   ) async {
     final Reference storageRef =
-        FirebaseStorage.instance.ref().child("chat_images");
+        FirebaseStorage.instance.ref().child("chat_images").child(image.name);
     // final storageRef = await _messagesCollection(messagesId).doc(id).get();
 
     final taskSnapshot = await storageRef.putFile(
@@ -93,11 +92,46 @@ class MessageService {
     );
   }
 
+  Future messageDelete(
+    String messagesId,
+    String idInfo,
+    String id,
+    Chat chat,
+  ) async {
+    await _messagesCollection(messagesId).doc(id).delete();
+    // var snapshot = await (_messageinfoDocument(idInfo).get());
+
+    // var lastReadCount = 0;
+
+    // if (snapshot.exists) {
+    //   lastReadCount = lastReadCount + (snapshot.data()?.lastReadCount ?? 0);
+    // }
+
+    // dump(idInfo);
+    // dump(lastReadCount);
+    // await _messageinfoDocument(idInfo).set(
+    //   ChatStatus(
+    //     chatDate: chat.createdAtTimestamp,
+    //     chatKontent: chat.text,
+    //     lastReadCount: lastReadCount + 1,
+    //   ),
+    // );
+  }
+
   Future messageText({
     required String messagesId,
     required String idInfo,
     required String message,
   }) async {
     await messageAdd(messagesId, Chat.text(message), idInfo);
+  }
+
+  Future messageDeleteText({
+    required String messagesId,
+    required String idInfo,
+    required String id,
+    required Chat chat,
+  }) async {
+    await messageDelete(messagesId, idInfo, id, chat);
   }
 }
